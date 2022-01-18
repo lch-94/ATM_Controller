@@ -1,9 +1,3 @@
-
-# InsertCard
-# PIN number
-# Select Account
-# See Balance/Deposit/Withdraw
-
 class CardInfo:
     def __init__(self, card_num, card_pin, valid_thru_month=None, 
                 valid_thru_year=None, card_cvc=None, user_name=None):
@@ -17,10 +11,10 @@ class CardInfo:
 
         self.list_account = []
 
+
     def add_test_account(self, name, balance):
         account = Account(name, balance)
         self.list_account.append(account)
-
 
 
     def check_PIN_validataion(self, card_pin):
@@ -34,10 +28,7 @@ class ATM:
     def __init__(self):
         self.list_CardInfo = []
 
-    # test
-    def add_cardInfo(self, cardInfo):
-        self.list_CardInfo.append(cardInfo)
-    
+
     def add_test_cardInfo(self):
         with open("test_card_info.csv", "r") as f:
             for line in f:
@@ -54,7 +45,6 @@ class ATM:
                                                     int(account_csv_info[2]))
 
                 self.list_CardInfo.append(cardInfo)
-
 
         if len(self.list_CardInfo) != 0:
             print(f"[*] test setting loaded,  {len(self.list_CardInfo)}")
@@ -133,6 +123,23 @@ def PIN_number(atm, cardInfo_input):
     return card
 
 
+def do_atm_job(account):
+    cmd = ""
+    while cmd != 4:
+        cmd = print_cmd()
+        if cmd == 1:
+            print(f"Your {account.name} account Balance : {account.balance}")
+        elif cmd == 2:
+            amount = int(input("  Input the amount to be deposited : "))
+            account.deposit(amount)
+            print(f"  Balance after deposit : {account.balance}")
+        elif cmd == 3:
+            amount = int(input("  Input the amount to be withdrawn : "))
+            account.withdraw(amount)
+            print(f"  Balance after withdrawal : {account.balance}")
+        elif cmd == 4:
+            print(f"exit")
+
 
 def main():
     # setting local ATM
@@ -157,24 +164,9 @@ def main():
         print("Wrong account info")
         exit(0)
 
-    # 
-    cmd = ""
-    while cmd != 4:
-        cmd = print_cmd()
-
-        if cmd == 1:
-            print(f"Your {account.name} account Balance : {account.balance}")
-        elif cmd == 2:
-            amount = int(input("  Input the amount to be deposited : "))
-            account.deposit(amount)
-            print(f"  Balance after deposit : {account.balance}")
-        elif cmd == 3:
-            amount = int(input("  Input the amount to be withdrawn : "))
-            account.withdraw(amount)
-            print(f"  Balance after withdrawal : {account.balance}")
-        elif cmd == 4:
-            print(f"exit")
-
+    # See Balance/Deposit/Withdraw
+    do_atm_job(account)
+    
 
 if __name__ == "__main__":
     main()
